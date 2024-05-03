@@ -1,4 +1,4 @@
-package router
+package controller
 
 import (
 	"log"
@@ -8,7 +8,7 @@ import (
 	"github.com/iambpn/go-http-template/internal/service/helloWorld"
 )
 
-func AddRoutes(mux *http.ServeMux,
+func New(mux *http.ServeMux,
 	logger *log.Logger,
 	config config.AppConfig) {
 

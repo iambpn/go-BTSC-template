@@ -5,7 +5,8 @@ import (
 	"net/http"
 
 	"github.com/iambpn/go-http-template/internal/config"
-	"github.com/iambpn/go-http-template/internal/router"
+	"github.com/iambpn/go-http-template/internal/controller"
+	"github.com/iambpn/go-http-template/internal/middleware"
 )
 
 func NewServer(
@@ -14,7 +15,7 @@ func NewServer(
 ) http.Handler {
 	mux := http.NewServeMux()
 
-	router.AddRoutes(
+	controller.New(
 		mux,
 		logger,
 		*config,
@@ -24,7 +25,7 @@ func NewServer(
 	var handler http.Handler = mux
 
 	// Add global middlewares Here
-	// handler = someMiddleware(handler)
+	handler = middleware.LoggingMiddleware(logger, handler)
 
 	return handler
 }

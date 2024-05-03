@@ -21,6 +21,8 @@ func New(
 	return &helloWorld{appConfig: a, logger: logger}
 }
 
+// TODO: implement error validation
+
 func (h *helloWorld) SayHelloWorld() http.Handler {
 	type response struct {
 		Greeting string `json:"greeting"`

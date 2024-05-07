@@ -21,8 +21,6 @@ func New(
 	return &helloWorld{appConfig: a, logger: logger}
 }
 
-// TODO: implement error validation
-
 func (h *helloWorld) SayHelloWorld() http.Handler {
 	type response struct {
 		Greeting string `json:"greeting"`
@@ -32,10 +30,18 @@ func (h *helloWorld) SayHelloWorld() http.Handler {
 		func(w http.ResponseWriter, r *http.Request) {
 			h.logger.Println("Inside of Hello world service: " + r.URL.Path)
 
-			name := r.URL.Query().Get("name")
+			q := Query{
+				name: r.URL.Query().Get("name"),
+			}
 
-			helper.JsonEncode(w, r, http.StatusInternalServerError, response{
-				Greeting: fmt.Sprintf("Hello %s from %s:%s", name, h.appConfig.Host, h.appConfig.Port),
+			problems := q.Valid(r.Context())
+
+			helper.JsonEncode(w, r, h.logger, http.StatusBadRequest, helper.HttpError{
+				Message: problems["name"],
+			})
+
+			helper.JsonEncode(w, r, h.logger, http.StatusInternalServerError, response{
+				Greeting: fmt.Sprintf("Hello %s from %s:%s", q.name, h.appConfig.Host, h.appConfig.Port),
 			})
 		},
 	)

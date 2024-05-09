@@ -36,11 +36,20 @@ func (h *helloWorld) SayHelloWorld() http.Handler {
 
 			problems := q.Valid(r.Context())
 
-			helper.JsonEncode(w, r, h.logger, http.StatusBadRequest, helper.HttpError{
-				Message: problems["name"],
-			})
+			if len(problems) > 0 {
+				errorDetails := []string{}
 
-			helper.JsonEncode(w, r, h.logger, http.StatusInternalServerError, response{
+				for _, v := range problems {
+					errorDetails = append(errorDetails, v)
+				}
+
+				helper.JsonEncodeError(w, r, http.StatusBadRequest, helper.HttpError{
+					Message: errorDetails,
+				})
+				return
+			}
+
+			helper.JsonEncode(w, r, http.StatusInternalServerError, response{
 				Greeting: fmt.Sprintf("Hello %s from %s:%s", q.name, h.appConfig.Host, h.appConfig.Port),
 			})
 		},

@@ -8,7 +8,7 @@ golang net/http router starter template
 - [x] Graceful Shutdown Integration
 - [x] Middleware Examples
 - [x] 0 Dependencies
-- [ ]
+- [x] Error handler
 
 ## Links:
 

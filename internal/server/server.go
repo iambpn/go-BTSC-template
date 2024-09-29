@@ -1,31 +1,30 @@
 package server
 
 import (
-	"log"
+	"fmt"
 	"net/http"
+	"os"
+	"strconv"
+	"time"
 
-	"github.com/iambpn/go-http-template/internal/config"
-	"github.com/iambpn/go-http-template/internal/controller"
-	"github.com/iambpn/go-http-template/internal/middleware"
+	"github.com/iambpn/go-http-template/internal/database"
+	"github.com/iambpn/go-http-template/internal/route"
 )
 
-func NewServer(
-	logger *log.Logger,
-	config *config.AppConfig,
-) http.Handler {
-	mux := http.NewServeMux()
+func NewServer() *http.Server {
+	port, _ := strconv.Atoi(os.Getenv("PORT"))
 
-	controller.New(
-		mux,
-		logger,
-		*config,
-	)
+	// initialize database
+	database.NewDb()
 
-	// using polymorphism to get http.Handler
-	var handler http.Handler = mux
+	// Declare Server config
+	server := &http.Server{
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      route.RegisterRoutes(),
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 30 * time.Second,
+	}
 
-	// Add global middlewares Here
-	handler = middleware.LoggingMiddleware(logger, handler)
-
-	return handler
+	return server
 }

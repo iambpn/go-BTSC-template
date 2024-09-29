@@ -1,0 +1,13 @@
+package page
+
+import "github.com/iambpn/go-http-template/cmd/web/view/layouts"
+
+templ HelloForm() {
+	@layout.Base() {
+		<form hx-post="/hello" method="POST" hx-target="#hello-container">
+			<input class="border" id="name" name="name" type="text"/>
+			<button type="submit">Submit</button>
+		</form>
+		<div id="hello-container"></div>
+	}
+}

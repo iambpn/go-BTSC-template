@@ -4,7 +4,7 @@ golang web starter template
 
 ## Usage:
 
-Clone this project and replace with `github.com/iambpn/go-http-template` with go mod's module name.
+Clone this project and find and replace all instance of `github.com/iambpn/go-http-template` with your go module name.
 
 ## Commands:
 

@@ -1,6 +1,6 @@
-# go-http-template
+# go-BTC-http-template
 
-golang web starter template
+golang web starter template with Bun ORM, Templ Template Engine and Chi Router. Sqlite DB is configured as default for this project.
 
 ## Usage:
 
